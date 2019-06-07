@@ -1,0 +1,45 @@
+package datatype;
+
+import java_cup.runtime.*;
+import datatype.tree.*;
+
+
+terminal CLASS, LPAREN, RPAREN, VIRG, ABSTRACT, EXTENDS, CONST  ;
+terminal String ID;
+
+non terminal String superclass;
+non terminal Lista<Class> class_list;
+non terminal Classe class;
+non terminal Arg arg;
+non terminal Lista<Arg> args;
+
+precedence left VIRG;
+
+start with class_list;
+
+
+class_list ::= class:v class_list:prox
+               {: RESULT = new Lista(v,prox); :} 
+             | {: RESULT = null; :}
+             ;
+
+class ::= CLASS ID:n LPAREN args:a RPAREN superclass:s 
+        {: RESULT = new Classe(false,n,a,s); :}
+        | ABSTRACT CLASS ID:n
+        {: RESULT = new Classe(true,n,null,"Object"); :}
+        ;
+
+superclass ::= EXTENDS ID:n {: RESULT = n; :}
+             | {: RESULT = "Object"; :}
+             ;
+
+args ::= arg:a1 VIRG args:a2 {: RESULT = new Lista(a1,a2); :}
+       | arg:a {: RESULT = new Lista(a,null); :}
+       | {: RESULT = null; :} 
+       ;
+arg  ::= ID:ty ID:na
+       {: RESULT = new Arg(false,ty,na); :}
+       | CONST ID:ty ID:na
+       {: RESULT = new Arg(true, ty, na); :} 
+	   ;
+	

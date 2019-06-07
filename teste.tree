@@ -1,0 +1,5 @@
+class Pessoa(String nome, int idade)
+
+abstract class Expr
+class Num(int val) extends Expr
+class Soma(Expr esq, Expr dir) extends Expr
